@@ -33,6 +33,11 @@ export interface OfficerDashboardData {
   recentAnnouncements: any[];
 }
 
+/**
+ * Fetches the currently authenticated user's profile and rank data.
+ *
+ * @returns {Promise<UserProfile | null>} The user profile object, or null if unauthenticated or error occurs.
+ */
 export async function getProfile(): Promise<UserProfile | null> {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
@@ -62,6 +67,13 @@ export async function getProfile(): Promise<UserProfile | null> {
   return data as unknown as UserProfile;
 }
 
+/**
+ * Retrieves the required dashboard metrics and entities tailored for a Cadet user.
+ * Includes their next scheduled formation, personal attendance score, and command announcements.
+ *
+ * @param {string} userId - The UUID of the authenticated Cadet.
+ * @returns {Promise<CadetDashboardData>} The populated data object for the Cadet view.
+ */
 export async function getCadetDashboardData(userId: string): Promise<CadetDashboardData> {
   const supabase = await createClient();
 
@@ -122,6 +134,12 @@ export async function getCadetDashboardData(userId: string): Promise<CadetDashbo
   }
 }
 
+/**
+ * Retrieves unit-wide dashboard metrics tailored for Officer and Administrator users.
+ * Includes total active personnel strength, unit-wide attendance readiness, and command announcements.
+ *
+ * @returns {Promise<OfficerDashboardData>} The populated data object for the Officer view.
+ */
 export async function getOfficerDashboardData(): Promise<OfficerDashboardData> {
   const supabase = await createClient();
 

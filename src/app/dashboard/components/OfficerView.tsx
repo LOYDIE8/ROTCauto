@@ -1,6 +1,15 @@
 import { Users, Crosshair, FileText, AlertTriangle } from 'lucide-react';
 import { UserProfile, OfficerDashboardData } from '@/services/dashboard';
 
+/**
+ * Renders the dashboard view specifically tailored for Officers and Administrators.
+ * Displays unit-wide metrics including total strength, attendance readiness, and quick action controls.
+ *
+ * @param {Object} props - The component props.
+ * @param {UserProfile} props.profile - The authenticated Officer's profile data.
+ * @param {OfficerDashboardData} props.data - The unit-wide metrics and command data.
+ * @returns {JSX.Element} The rendered Officer dashboard view.
+ */
 export default function OfficerView({
   profile,
   data,

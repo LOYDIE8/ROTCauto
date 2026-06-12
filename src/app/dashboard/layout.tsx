@@ -5,6 +5,14 @@ import { LogOut, LayoutDashboard, Users, Calendar, Megaphone } from 'lucide-reac
 import Link from 'next/link';
 import { useRouter, usePathname } from 'next/navigation';
 
+/**
+ * The global layout wrapper for all authenticated dashboard routes.
+ * Implements the tactical, militaristic UI theme, sidebar navigation, and session termination logic.
+ *
+ * @param {Object} props - The component props.
+ * @param {React.ReactNode} props.children - The nested page content to render.
+ * @returns {JSX.Element} The rendered dashboard layout structure.
+ */
 export default function DashboardLayout({
   children,
 }: {

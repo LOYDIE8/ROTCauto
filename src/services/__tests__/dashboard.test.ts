@@ -7,7 +7,9 @@ jest.mock('@/utils/supabase/server', () => ({
 }));
 
 describe('Dashboard Service Layer', () => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let mockSupabase: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let mockQueryBuilder: any;
 
   beforeEach(() => {
@@ -21,6 +23,7 @@ describe('Dashboard Service Layer', () => {
 
     // We'll create a factory function to always return a new chainable object that resolves directly if awaited
     const createChain = () => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const chain: any = {};
       chain.select = jest.fn().mockReturnValue(chain);
       chain.eq = jest.fn().mockReturnValue(chain);
