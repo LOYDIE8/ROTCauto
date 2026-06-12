@@ -65,83 +65,114 @@ export async function getProfile(): Promise<UserProfile | null> {
 export async function getCadetDashboardData(userId: string): Promise<CadetDashboardData> {
   const supabase = await createClient();
 
-  // 1. Get next scheduled event
-  const { data: nextEvent } = await supabase
-    .from('events')
-    .select('*')
-    .gte('event_date', new Date().toISOString())
-    .order('event_date', { ascending: true })
-    .limit(1)
-    .single();
+  try {
+    // 1. Get next scheduled event
+    // .single() throws if no rows are found, so we use limit(1) without .single()
+    const { data: events, error: eventsError } = await supabase
+      .from('events')
+      .select('*')
+      .gte('event_date', new Date().toISOString())
+      .order('event_date', { ascending: true })
+      .limit(1);
 
-  // 2. Calculate attendance score (Present / Total logs) * 100
-  const { data: attendanceLogs } = await supabase
-    .from('attendance')
-    .select('status')
-    .eq('user_id', userId);
+    if (eventsError) console.error('Error fetching events:', eventsError);
+    const nextEvent = events && events.length > 0 ? events[0] : null;
 
-  let attendanceScore = 100; // Default to 100% if no logs
-  if (attendanceLogs && attendanceLogs.length > 0) {
-    const presentCount = attendanceLogs.filter(log => log.status === 'Present').length;
-    attendanceScore = Math.round((presentCount / attendanceLogs.length) * 100);
+    // 2. Calculate attendance score (Present / Total logs) * 100
+    const { data: attendanceLogs, error: attendanceError } = await supabase
+      .from('attendance')
+      .select('status')
+      .eq('user_id', userId);
+
+    if (attendanceError) console.error('Error fetching attendance logs:', attendanceError);
+
+    let attendanceScore = 100; // Default to 100% if no logs
+    if (attendanceLogs && attendanceLogs.length > 0) {
+      const presentCount = attendanceLogs.filter(log => log.status === 'Present').length;
+      attendanceScore = Math.round((presentCount / attendanceLogs.length) * 100);
+    }
+
+    // 3. Get recent announcements
+    const { data: recentAnnouncements, error: announcementsError } = await supabase
+      .from('announcements')
+      .select(`
+        *,
+        posted_by_profile:personnel_profiles!posted_by (
+          last_name,
+          rank:ranks(abbreviation)
+        )
+      `)
+      .order('created_at', { ascending: false })
+      .limit(3);
+
+    if (announcementsError) console.error('Error fetching announcements:', announcementsError);
+
+    return {
+      nextEvent,
+      attendanceScore,
+      recentAnnouncements: recentAnnouncements || [],
+    };
+  } catch (error) {
+    console.error('Unexpected error in getCadetDashboardData:', error);
+    return {
+      nextEvent: null,
+      attendanceScore: 100,
+      recentAnnouncements: [],
+    };
   }
-
-  // 3. Get recent announcements
-  const { data: recentAnnouncements } = await supabase
-    .from('announcements')
-    .select(`
-      *,
-      posted_by_profile:personnel_profiles!posted_by (
-        last_name,
-        rank:ranks(abbreviation)
-      )
-    `)
-    .order('created_at', { ascending: false })
-    .limit(3);
-
-  return {
-    nextEvent: nextEvent || null,
-    attendanceScore,
-    recentAnnouncements: recentAnnouncements || [],
-  };
 }
 
 export async function getOfficerDashboardData(): Promise<OfficerDashboardData> {
   const supabase = await createClient();
 
-  // 1. Get unit strength (Total Active Personnel)
-  const { count: unitStrength } = await supabase
-    .from('personnel_profiles')
-    .select('*', { count: 'exact', head: true })
-    .eq('status', 'Active');
+  try {
+    // 1. Get unit strength (Total Active Personnel)
+    const { count: unitStrength, error: strengthError } = await supabase
+      .from('personnel_profiles')
+      .select('*', { count: 'exact', head: true })
+      .eq('status', 'Active');
 
-  // 2. Get overall attendance average across the unit
-  const { data: allAttendance } = await supabase
-    .from('attendance')
-    .select('status');
+    if (strengthError) console.error('Error fetching unit strength:', strengthError);
 
-  let overallAttendance = 100;
-  if (allAttendance && allAttendance.length > 0) {
-    const presentCount = allAttendance.filter(log => log.status === 'Present').length;
-    overallAttendance = Math.round((presentCount / allAttendance.length) * 100);
+    // 2. Get overall attendance average across the unit
+    const { data: allAttendance, error: attendanceError } = await supabase
+      .from('attendance')
+      .select('status');
+
+    if (attendanceError) console.error('Error fetching all attendance:', attendanceError);
+
+    let overallAttendance = 100;
+    if (allAttendance && allAttendance.length > 0) {
+      const presentCount = allAttendance.filter(log => log.status === 'Present').length;
+      overallAttendance = Math.round((presentCount / allAttendance.length) * 100);
+    }
+
+    // 3. Get recent announcements
+    const { data: recentAnnouncements, error: announcementsError } = await supabase
+      .from('announcements')
+      .select(`
+        *,
+        posted_by_profile:personnel_profiles!posted_by (
+          last_name,
+          rank:ranks(abbreviation)
+        )
+      `)
+      .order('created_at', { ascending: false })
+      .limit(3);
+
+    if (announcementsError) console.error('Error fetching announcements:', announcementsError);
+
+    return {
+      unitStrength: unitStrength || 0,
+      overallAttendance,
+      recentAnnouncements: recentAnnouncements || [],
+    };
+  } catch (error) {
+    console.error('Unexpected error in getOfficerDashboardData:', error);
+    return {
+      unitStrength: 0,
+      overallAttendance: 100,
+      recentAnnouncements: [],
+    };
   }
-
-  // 3. Get recent announcements
-  const { data: recentAnnouncements } = await supabase
-    .from('announcements')
-    .select(`
-      *,
-      posted_by_profile:personnel_profiles!posted_by (
-        last_name,
-        rank:ranks(abbreviation)
-      )
-    `)
-    .order('created_at', { ascending: false })
-    .limit(3);
-
-  return {
-    unitStrength: unitStrength || 0,
-    overallAttendance,
-    recentAnnouncements: recentAnnouncements || [],
-  };
 }
