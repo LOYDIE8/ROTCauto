@@ -1,7 +1,7 @@
 'use client';
 
 import { createClient } from '@/utils/supabase/client';
-import { LogOut, LayoutDashboard, Users, Calendar, Megaphone } from 'lucide-react';
+import { LogOut, LayoutDashboard, Users, Calendar, Megaphone, MessageSquareWarning } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter, usePathname } from 'next/navigation';
 
@@ -32,6 +32,7 @@ export default function DashboardLayout({
     { name: 'Personnel', href: '/dashboard/personnel', icon: Users },
     { name: 'Events', href: '/dashboard/events', icon: Calendar },
     { name: 'Announcements', href: '/dashboard/announcements', icon: Megaphone },
+    { name: 'Field Report', href: '/dashboard/feedback', icon: MessageSquareWarning },
   ];
 
   return (
