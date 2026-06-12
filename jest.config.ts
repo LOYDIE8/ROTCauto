@@ -2,7 +2,7 @@ import type { Config } from 'jest';
 
 const config: Config = {
   preset: 'ts-jest',
-  testEnvironment: 'node',
+  testEnvironment: 'jsdom',
   moduleNameMapper: {
     // Map Next.js path aliases
     '^@/(.*)$': '<rootDir>/src/$1',
