@@ -16,6 +16,13 @@ const loginSchema = z.object({
 
 type LoginFormValues = z.infer<typeof loginSchema>;
 
+/**
+ * Renders the authentication portal.
+ * Handles user login via Supabase Auth using email and password, utilizing react-hook-form and Zod for validation.
+ * Features a minimalist militaristic UI aesthetic.
+ *
+ * @returns {JSX.Element} The rendered login page component.
+ */
 export default function LoginPage() {
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);

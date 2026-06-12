@@ -1,6 +1,15 @@
 import { Shield, Clock, AlertTriangle } from 'lucide-react';
 import { UserProfile, CadetDashboardData } from '@/services/dashboard';
 
+/**
+ * Renders the dashboard view specifically tailored for Cadets.
+ * Displays personal metrics including current rank, upcoming formations, and personal attendance.
+ *
+ * @param {Object} props - The component props.
+ * @param {UserProfile} props.profile - The authenticated Cadet's profile data.
+ * @param {CadetDashboardData} props.data - The metrics and data specific to the Cadet.
+ * @returns {JSX.Element} The rendered Cadet dashboard view.
+ */
 export default function CadetView({
   profile,
   data,
