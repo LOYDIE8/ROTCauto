@@ -1,13 +1,13 @@
 'use client';
 
-import React from 'react';
+import { JSX } from 'react';
 
 /**
  * Component for the Promotion Criteria Engine.
  *
- * @returns {React.JSX.Element} The promotion criteria engine component.
+ * @returns {JSX.Element} The promotion criteria engine component.
  */
-export default function PromotionEngine(): React.JSX.Element {
+export default function PromotionEngine(): JSX.Element {
   return (
     <div>
       {/* Promotion Criteria Engine logic will be implemented here */}

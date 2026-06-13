@@ -1,13 +1,13 @@
 'use client';
 
-import React from 'react';
+import { JSX } from 'react';
 
 /**
  * Component for exporting documents.
  *
- * @returns {React.JSX.Element} The document export component.
+ * @returns {JSX.Element} The document export component.
  */
-export default function DocumentExport(): React.JSX.Element {
+export default function DocumentExport(): JSX.Element {
   return (
     <div>
       {/* Document export logic will be implemented here */}

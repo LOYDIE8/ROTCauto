@@ -1,13 +1,13 @@
 'use client';
 
-import React from 'react';
+import { JSX } from 'react';
 
 /**
  * Component for the Event Calendar.
  *
- * @returns {React.JSX.Element} The event calendar component.
+ * @returns {JSX.Element} The event calendar component.
  */
-export default function EventCalendar(): React.JSX.Element {
+export default function EventCalendar(): JSX.Element {
   return (
     <div>
       {/* Event Calendar logic will be implemented here */}
