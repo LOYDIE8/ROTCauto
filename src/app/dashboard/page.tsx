@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic';
 import { getProfile, getCadetDashboardData, getOfficerDashboardData } from '@/services/dashboard';
 import CadetView from './components/CadetView';
 import OfficerView from './components/OfficerView';
