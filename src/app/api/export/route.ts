@@ -9,7 +9,7 @@ import { NextResponse } from 'next/server';
  */
 export async function GET(): Promise<NextResponse> {
   // Logic to export document
-  return NextResponse.json({ message: 'Document Export API Skeleton' });
+  return NextResponse.json({ status: 'Not implemented' }, { status: 501 });
 }
 
 /**
@@ -19,5 +19,5 @@ export async function GET(): Promise<NextResponse> {
  */
 export async function POST(): Promise<NextResponse> {
   // Logic to configure/create export task
-  return NextResponse.json({ message: 'Document Export API Skeleton' });
+  return NextResponse.json({ status: 'Not implemented' }, { status: 501 });
 }

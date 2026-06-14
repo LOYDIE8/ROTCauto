@@ -9,7 +9,7 @@ import { NextResponse } from 'next/server';
  */
 export async function GET(): Promise<NextResponse> {
   // Logic to fetch calendar events
-  return NextResponse.json({ message: 'Event Calendar API Skeleton' });
+  return NextResponse.json({ status: 'Not implemented' }, { status: 501 });
 }
 
 /**
@@ -19,5 +19,5 @@ export async function GET(): Promise<NextResponse> {
  */
 export async function POST(): Promise<NextResponse> {
   // Logic to create/update events
-  return NextResponse.json({ message: 'Event Calendar API Skeleton' });
+  return NextResponse.json({ status: 'Not implemented' }, { status: 501 });
 }
